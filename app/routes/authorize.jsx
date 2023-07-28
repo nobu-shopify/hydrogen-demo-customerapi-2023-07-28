@@ -206,14 +206,17 @@ async function exchangeAccessToken(
     Origin: origin,
   };
 
+  console.log('headers', headers);
+
   // Token Endpoint goes here
-  const response = await fetch(`https://shopify.com/<${shopifyStoreID}/auth/oauth/token`, {
+  const response = await fetch(`https://shopify.com/${shopifyStoreID}/auth/oauth/token`, {
     method: 'POST',
     headers,
     body,
   });
 
-  console.log('response', response);
+  console.log('response', JSON.stringify(response));
+//  console.log('response', response);
 
   const data = await response.json();
   if (data.error) {
