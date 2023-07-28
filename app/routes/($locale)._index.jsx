@@ -11,7 +11,7 @@ import {routeHeaders} from '~/data/cache';
 
 export const headers = routeHeaders;
 
-export async function loader({params, context}) {
+export async function loader({params, context, request}) {
   const {language, country} = context.storefront.i18n;
 
   if (
@@ -29,8 +29,55 @@ export async function loader({params, context}) {
 
   const seo = seoPayload.home();
 
+  // Customer Account API
+  const accessToken = context.session.get('customer_access_token');
+  console.log('request', request);
+
+  let user = null;
+  if (Boolean(accessToken)) {
+    const userAgent =
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36';
+    const origin = new URL(request.url).origin // Will be http://localhost:3000 in development or an oxygen generated host
+  
+    const query = `query customer {
+        personalAccount {
+          email
+        }
+      }`
+    const variables = {}
+  
+    user = await fetch(
+      `https://shopify.com/${context.env.SHOPIFY_STORE_ID}/account/customer/api/${context.env.CUSTOMER_API_VERSION}/graphql`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': userAgent,
+          Origin: origin,
+          Authorization: accessToken,
+        },
+        body: JSON.stringify({
+          operationName: 'SomeQuery',
+          query,
+          variables: variables,
+        }),
+      },
+      ).then(async (response) => {
+        if (!response.ok) {
+          throw new Error(
+            `${response.status} (RequestID ${response.headers.get(
+              'x-request-id',
+            )}): ${await response.text()}`,
+          );
+        }
+        return (await response.json()).data;
+      });  
+  }
+  console.log('user', user);
+
   return defer({
     shop,
+    userData: user,
     primaryHero: hero,
     // These different queries are separated to illustrate how 3rd party content
     // fetching can be optimized for both above and below the fold.
@@ -77,6 +124,7 @@ export async function loader({params, context}) {
 
 export default function Homepage() {
   const {
+    userData,
     primaryHero,
     secondaryHero,
     tertiaryHero,
@@ -89,6 +137,16 @@ export default function Homepage() {
 
   return (
     <>
+      {userData && (
+        <Suspense>
+          <div>
+            <b>
+              Welcome {userData.personalAccount.email}
+            </b>
+          </div>
+        </Suspense>
+      )}
+
       {primaryHero && (
         <Hero {...primaryHero} height="full" top loading="eager" />
       )}

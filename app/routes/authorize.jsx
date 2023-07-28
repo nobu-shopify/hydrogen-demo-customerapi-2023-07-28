@@ -222,5 +222,6 @@ async function exchangeAccessToken(
   if (data.error) {
     throw new Response(data.error_description, {status: 400});
   }
+  console.log('access_token', data.access_token);
   return data.access_token;
 }
