@@ -180,8 +180,7 @@ async function exchangeAccessToken(
   context
 ) {
   const clientId = customerAccountId;
-  const customerApiClientId = customerAccountId;
-//  const customerApiClientId = '30243aa5-17c1-465a-8493-944bcc4e88aa';
+  const customerApiClientId = '30243aa5-17c1-465a-8493-944bcc4e88aa';
   const accessToken = session.get('customer_authorization_code_token');
   const body = new URLSearchParams();
   const shopifyStoreID = context.env.SHOPIFY_STORE_ID;
