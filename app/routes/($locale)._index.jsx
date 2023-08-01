@@ -284,7 +284,7 @@ async function refreshToken(
   );
   session.set('customer_authorization_code_token', access_token);
   session.set('expires_in', expires_in);
-//  session.set('id_token', id_token);  // TODO: DEBUG - do we really get a new id_token?
+  session.set('id_token', id_token);  // TODO: DEBUG - do we get a new id_token?
   session.set('refresh_token', refresh_token);
 
   const customerAccessToken = await exchangeAccessToken(
