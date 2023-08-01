@@ -195,7 +195,7 @@ async function exchangeAccessToken(
   );
   body.append('scopes', 'https://api.customers.com/auth/customer.graphql');
 
-  console.log('body', body);
+//  console.log('body', body);
 
   const userAgent =
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36';
@@ -206,7 +206,7 @@ async function exchangeAccessToken(
     Origin: origin,
   };
 
-  console.log('headers', headers);
+//  console.log('headers', headers);
 
   // Token Endpoint goes here
   const response = await fetch(`https://shopify.com/${shopifyStoreID}/auth/oauth/token`, {
@@ -215,13 +215,13 @@ async function exchangeAccessToken(
     body,
   });
 
-  console.log('response', JSON.stringify(response));
+//  console.log('response', JSON.stringify(response));
 //  console.log('response', response);
 
   const data = await response.json();
   if (data.error) {
     throw new Response(data.error_description, {status: 400});
   }
-  console.log('access_token', data.access_token);
+//  console.log('access_token', data.access_token);
   return data.access_token;
 }

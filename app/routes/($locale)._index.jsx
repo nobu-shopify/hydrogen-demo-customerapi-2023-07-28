@@ -31,7 +31,7 @@ export async function loader({params, context, request}) {
 
   // Customer Account API
   const accessToken = context.session.get('customer_access_token');
-  console.log('request', request);
+//  console.log('request', request);
 
   let user = null;
   if (Boolean(accessToken)) {
@@ -73,10 +73,11 @@ export async function loader({params, context, request}) {
         return (await response.json()).data;
       });  
   }
-  console.log('user', user);
+//  console.log('user', user);
 
   return defer({
     shop,
+    // User info from Customer Account API
     userData: user,
     primaryHero: hero,
     // These different queries are separated to illustrate how 3rd party content
