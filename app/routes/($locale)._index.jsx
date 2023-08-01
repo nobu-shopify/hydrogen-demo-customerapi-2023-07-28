@@ -283,8 +283,8 @@ async function refreshToken(
     new Date(new Date().getTime() + (expires_in - 120) * 1000).getTime(),
   );
   session.set('customer_authorization_code_token', access_token);
-  session.set('expires_in', expires_in);
-  session.set('id_token', id_token);  // TODO: DEBUG - do we get a new id_token?
+  session.set('expires_in', expires_in);  // TODO: DEBUG - this line does not exist in the original code
+  session.set('id_token', id_token);      // TODO: DEBUG - trying to refresh token in 2 min id_token was undefined
   session.set('refresh_token', refresh_token);
 
   const customerAccessToken = await exchangeAccessToken(
