@@ -10,6 +10,8 @@ export const handle = {
 };
 
 export async function loader({context, params}) {
+
+  // TODO: update this section to support Customer Account API?
   const customerAccessToken = await context.session.get('customerAccessToken');
 
   if (customerAccessToken) {
@@ -22,6 +24,33 @@ export async function loader({context, params}) {
 
 const badRequest = (data) => json(data, {status: 400});
 
+export const meta = () => {
+  return [{title: 'Login'}];
+};
+
+export default function Login() {
+  const {shopName} = useLoaderData();
+  const actionData = useActionData();
+
+  return (
+    <div className="flex justify-center my-24 px-4">
+      <div className="max-w-md w-full">
+        <h1 className="text-4xl">Sign in.</h1>
+        <Form method="post" action="/authorize">
+          <button 
+            className="bg-primary text-contrast rounded py-2 px-4 focus:shadow-outline block w-full 
+            hover:bg-yellow-100 active:bg-yellow-500">
+              CLICK HERE TO LOG IN WITH CUSTOMER ACCOUNT API
+          </button>
+        </Form>
+      </div>
+    </div>
+  );
+}
+
+
+// TODO: remove below old login code
+// TODO: remove below old login code
 export const action = async ({request, context, params}) => {
   const formData = await request.formData();
 
@@ -73,32 +102,6 @@ export const action = async ({request, context, params}) => {
     });
   }
 };
-
-export const meta = () => {
-  return [{title: 'Login'}];
-};
-
-export default function Login() {
-  const {shopName} = useLoaderData();
-  const actionData = useActionData();
-  const [nativeEmailError, setNativeEmailError] = useState(null);
-  const [nativePasswordError, setNativePasswordError] = useState(null);
-
-  return (
-    <div className="flex justify-center my-24 px-4">
-      <div className="max-w-md w-full">
-        <h1 className="text-4xl">Sign in.</h1>
-        {/* TODO: Add onSubmit to validate _before_ submission with native? */}
-        <Form method="post" action="/authorize">
-          <button 
-            className="bg-primary text-contrast rounded py-2 px-4 focus:shadow-outline block w-full">
-              CLICK HERE TO LOG IN WITH CUSTOMER ACCOUNT API
-          </button>
-        </Form>
-      </div>
-    </div>
-  );
-}
 
 const LOGIN_MUTATION = `#graphql
   mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {

@@ -1,3 +1,11 @@
+# Shopify Customer Account API Hydrogen demo
+
+This code is closely following [Using the Customer Account API with Hydrogen](https://shopify.dev/docs/custom-storefronts/building-with-the-customer-account-api/hydrogen). Please check it out for step-by-step instructions.
+
+**Requirements:**
+Set the following EXTRA env variables in Admin -> Hydrogen channel -> (your_hydrogen_storefront) -> More actions -> Storefront settings -> Environments and variables:
+- SHOPIFY_STORE_ID = (your store ID, typically 12-digit number)
+
 # Hydrogen template: Demo Store
 
 Hydrogen is Shopify’s stack for headless commerce. Hydrogen is designed to dovetail with [Remix](https://remix.run/), Shopify’s full stack web framework. This template contains a **full-featured setup** of components, queries and tooling to get started with Hydrogen.
