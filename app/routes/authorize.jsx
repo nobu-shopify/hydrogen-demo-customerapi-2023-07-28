@@ -101,6 +101,12 @@ export async function loader({request, context}) {
   context.session.set('id_token', id_token);
   context.session.set('refresh_token', refresh_token);
 
+  // For refreshing access token
+  context.session.set(
+    'expires_at',
+    new Date(new Date().getTime() + (expires_in - 120) * 1000).getTime(),
+  );
+
   // Customer access token
   const customerAccessToken = await exchangeAccessToken(
     context.session,
