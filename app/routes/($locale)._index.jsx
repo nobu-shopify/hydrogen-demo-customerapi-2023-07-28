@@ -30,16 +30,31 @@ export async function loader({params, context, request}) {
   const seo = seoPayload.home();
 
   // Customer Account API
-  const accessToken = context.session.get('customer_access_token');
-//  console.log('request', request);
-
-  // Refreshing access token
+  // Check login status, refresh access token if needed
   const loggedIn = await isLoggedIn(context, request);
 
   let user = null;
   if (loggedIn) {
-//  if (Boolean(accessToken)) {
-      const userAgent =
+    /** TODO: find a way to make cart association work
+
+    // Associate customer to the cart
+    const cart = context.cart;
+    const customerAccessToken = context.session.get('customer_access_token'); 
+    console.log('cart', cart);
+    console.log('customerAccessToken', customerAccessToken);
+
+    // Sync customerAccessToken with existing cart
+    const result = await cart.updateBuyerIdentity({customerAccessToken});
+
+    // Update cart id in cookie
+    const headers = cart.setCartId(result.cart.id);
+
+    headers.append('Set-Cookie', await session.commit());
+
+    */
+
+    // Extract customer info from Customer Account API
+    const userAgent =
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36';
     const origin = new URL(request.url).origin // Will be http://localhost:3000 in development or an oxygen generated host
   
@@ -53,7 +68,9 @@ export async function loader({params, context, request}) {
         }
       }`
     const variables = {}
-  
+    const accessToken = context.session.get('customer_access_token');
+    console.log('accessToken', accessToken);
+    
     user = await fetch(
       `https://shopify.com/${context.env.SHOPIFY_STORE_ID}/account/customer/api/${context.env.CUSTOMER_API_VERSION}/graphql`,
       {
