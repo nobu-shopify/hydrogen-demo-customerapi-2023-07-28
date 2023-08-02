@@ -335,7 +335,7 @@ async function isLoggedIn(context, request) {
 
   return false;
 }
-// Bring in from /routes/authorize.tsx
+// Bring in from /routes/authorize.jsx
 async function exchangeAccessToken(
   session,
   customerAccountId,
