@@ -36,7 +36,6 @@ export async function loader({params, context, request}) {
   let user = null;
   if (loggedIn) {
     /** TODO: find a way to make cart association work
-
     // Associate customer to the cart
     const cart = context.cart;
     const customerAccessToken = context.session.get('customer_access_token'); 
@@ -45,12 +44,12 @@ export async function loader({params, context, request}) {
 
     // Sync customerAccessToken with existing cart
     const result = await cart.updateBuyerIdentity({customerAccessToken});
+    console.log('buyerIdentityResult', result)
 
     // Update cart id in cookie
     const headers = cart.setCartId(result.cart.id);
 
     headers.append('Set-Cookie', await session.commit());
-
     */
 
     // Extract customer info from Customer Account API
