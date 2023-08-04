@@ -143,9 +143,13 @@ function CartLines({layout = 'drawer', lines: cartLines}) {
 function CartCheckoutActions({checkoutUrl}) {
   if (!checkoutUrl) return null;
 
+  // Stay authenticated at checkout - https://shopify.dev/docs/api/customer#step-stay-authenticated-on-checkout
+  const checkoutUrlLoggedIn = `${checkoutUrl}?logged_in=true`;
+  console.log('checkoutUrl', checkoutUrlLoggedIn);
+
   return (
     <div className="flex flex-col mt-2">
-      <a href={checkoutUrl} target="_self">
+      <a href={checkoutUrlLoggedIn} target="_self">
         <Button as="span" width="full">
           Continue to Checkout
         </Button>

@@ -3,8 +3,11 @@
 This code is closely following [Using the Customer Account API with Hydrogen](https://shopify.dev/docs/custom-storefronts/building-with-the-customer-account-api/hydrogen). Please check it out for step-by-step instructions.
 
 **Requirements:**
-Set the following EXTRA env variables in Admin -> Hydrogen channel -> (your_hydrogen_storefront) -> More actions -> Storefront settings -> Environments and variables:
+Set the following EXTRA env variables in Admin -> Hydrogen channel -> (your_hydrogen_storefront) -> More actions -> Storefront settings -> Environments and variables:  
 - SHOPIFY_STORE_ID = (your store ID, typically 12-digit number)
+  
+Enable "New customer accounts" in Admin -> Settings -> Customer Account -> Accounts in online store and checkout.  
+
 
 # Hydrogen template: Demo Store
 
