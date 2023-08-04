@@ -145,7 +145,6 @@ function CartCheckoutActions({checkoutUrl}) {
 
   // Stay authenticated at checkout - https://shopify.dev/docs/api/customer#step-stay-authenticated-on-checkout
   const checkoutUrlLoggedIn = `${checkoutUrl}?logged_in=true`;
-  console.log('checkoutUrl', checkoutUrlLoggedIn);
 
   return (
     <div className="flex flex-col mt-2">
