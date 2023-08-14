@@ -110,7 +110,11 @@ function redirectToFirstVariant({product, request}) {
     searchParams.set(option.name, option.value);
   }
 
-  throw redirect(`/products/${product.handle}?${searchParams.toString()}`, 302);
+//  throw redirect(`/products/${product.handle}?${searchParams.toString()}`, 302);
+  // Fix from https://github.com/Shopify/hydrogen/issues/1209
+  // Use URL to avoid accidental double encoding
+  const newUrl = new URL(`/products/${product.handle}?${searchParams.toString()}`, 'http://example.com');
+  throw redirect(newUrl.pathname + newUrl.search, 302);
 }
 
 export default function Product() {
