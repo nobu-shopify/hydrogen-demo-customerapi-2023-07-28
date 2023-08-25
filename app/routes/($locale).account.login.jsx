@@ -22,6 +22,10 @@ export async function loader({context, params}) {
   return json({shopName: 'Hydrogen'});
 }
 
+export const action = async ({request, context, params}) => {
+  return null;
+}
+
 const badRequest = (data) => json(data, {status: 400});
 
 export const meta = () => {
@@ -39,8 +43,16 @@ export default function Login() {
         <Form method="post" action="/authorize">
           <button 
             className="bg-primary text-contrast rounded py-2 px-4 focus:shadow-outline block w-full 
+            pt-6 pb-8 mt-4 mb-4 space-y-3
             hover:bg-yellow-100 active:bg-yellow-500">
-              CLICK HERE TO LOG IN WITH CUSTOMER ACCOUNT API
+              LOG IN WITH CUSTOMER ACCOUNT API
+          </button>
+        </Form>
+        <Form method="post" action="/logout">
+          <button 
+            className="bg-primary text-contrast rounded py-2 px-4 focus:shadow-outline block w-full 
+            hover:bg-yellow-100 active:bg-yellow-500">
+              LOG OUT WITH CUSTOMER ACCOUNT API
           </button>
         </Form>
       </div>
@@ -49,94 +61,6 @@ export default function Login() {
 }
 
 
-// TODO: remove below old login code
-// TODO: remove below old login code
-export const action = async ({request, context, params}) => {
-  const formData = await request.formData();
-
-  const email = formData.get('email');
-  const password = formData.get('password');
-
-  if (
-    !email ||
-    !password ||
-    typeof email !== 'string' ||
-    typeof password !== 'string'
-  ) {
-    return badRequest({
-      formError: 'Please provide both an email and a password.',
-    });
-  }
-
-  const {session, storefront, cart} = context;
-
-  try {
-    const customerAccessToken = await doLogin(context, {email, password});
-    session.set('customerAccessToken', customerAccessToken);
-
-    // Sync customerAccessToken with existing cart
-    const result = await cart.updateBuyerIdentity({customerAccessToken});
-
-    // Update cart id in cookie
-    const headers = cart.setCartId(result.cart.id);
-
-    headers.append('Set-Cookie', await session.commit());
-
-    return redirect(params.locale ? `/${params.locale}/account` : '/account', {
-      headers,
-    });
-  } catch (error) {
-    if (storefront.isApiError(error)) {
-      return badRequest({
-        formError: 'Something went wrong. Please try again later.',
-      });
-    }
-
-    /**
-     * The user did something wrong, but the raw error from the API is not super friendly.
-     * Let's make one up.
-     */
-    return badRequest({
-      formError:
-        'Sorry. We did not recognize either your email or password. Please try to sign in again or create a new account.',
-    });
-  }
-};
-
-const LOGIN_MUTATION = `#graphql
-  mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
-    customerAccessTokenCreate(input: $input) {
-      customerUserErrors {
-        code
-        field
-        message
-      }
-      customerAccessToken {
-        accessToken
-        expiresAt
-      }
-    }
-  }
-`;
-
-export async function doLogin({storefront}, {email, password}) {
-  const data = await storefront.mutate(LOGIN_MUTATION, {
-    variables: {
-      input: {
-        email,
-        password,
-      },
-    },
-  });
-
-  if (data?.customerAccessTokenCreate?.customerAccessToken?.accessToken) {
-    return data.customerAccessTokenCreate.customerAccessToken.accessToken;
-  }
-
-  /**
-   * Something is wrong with the user's input.
-   */
-  throw new Error(
-    data?.customerAccessTokenCreate?.customerUserErrors.join(', '),
-  );
+export function doLogin() {
+  return null;  // placeholder
 }

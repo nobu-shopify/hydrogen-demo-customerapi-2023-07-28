@@ -1,4 +1,8 @@
 import {redirect} from '@shopify/remix-oxygen';
+
+// For Customer Account API
+import {deleteUser} from './($locale)._index'
+
 export async function action({context}) {
   const shopifyStoreID = context.env.SHOPIFY_STORE_ID;
   const id_token = context.session.get('id_token');
@@ -8,6 +12,8 @@ export async function action({context}) {
   context.session.unset('expires_in');
   context.session.unset('id_token');
   context.session.unset('refresh_token');
+
+  deleteUser();
 
   // Logout Endpoint
   return redirect(`https://shopify.com/${shopifyStoreID}/auth/logout?id_token_hint=${id_token}`, {

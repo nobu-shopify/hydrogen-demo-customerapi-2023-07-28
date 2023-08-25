@@ -1,6 +1,8 @@
 import {redirect} from '@shopify/remix-oxygen';
 import {HydrogenSession} from 'server';
 
+// This is called deom login page with POST 204 - because action() is called first for non-GET requests.
+// See Remix doc: https://remix.run/docs/en/main/route/action
 export async function action({request, context}) {
   const clientId = context.env.PUBLIC_CUSTOMER_ACCOUNT_CLIENT_ID;
   const shopID = context.env.PUBLIC_STOREFRONT_ID;
@@ -42,6 +44,8 @@ export async function action({request, context}) {
     },
   });
 }
+
+// This is called from Customer Account endpoint as GET 302 with code and state
 export async function loader({request, context}) { 
   const code = new URL(request.url).searchParams.get('code');
   const state = new URL(request.url).searchParams.get('state');
